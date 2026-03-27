@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<title>OS Izpiski — Linux Mint ukazi</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; padding: 24px; }
+  h1 { text-align: center; font-size: 1.6rem; margin-bottom: 6px; color: #f8fafc; }
+  .subtitle { text-align: center; color: #94a3b8; font-size: 0.85rem; margin-bottom: 28px; }
+  .section-title { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: #475569; margin: 24px 0 10px; padding-bottom: 6px; border-bottom: 1px solid #1e2130; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-bottom: 8px; }
+  .card { background: #1e2130; border: 1px solid #2d3148; border-radius: 12px; padding: 18px; }
+  .card h2 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid #2d3148; }
+  .card h2 span { margin-right: 7px; }
+  .red h2 { color: #f87171; border-color: #3d1f1f; }
+  .green h2 { color: #4ade80; border-color: #1a3326; }
+  .blue h2 { color: #60a5fa; border-color: #1a2a3d; }
+  .yellow h2 { color: #fbbf24; border-color: #3d2e10; }
+  .purple h2 { color: #c084fc; border-color: #2d1f3d; }
+  .cyan h2 { color: #22d3ee; border-color: #1a3035; }
+  .orange h2 { color: #fb923c; border-color: #3d2510; }
+  .pink h2 { color: #f472b6; border-color: #3d1f2d; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  td { padding: 5px 6px; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  tr:not(:last-child) td { border-bottom: 1px solid #252840; }
+  code { background: #252840; color: #a5b4fc; padding: 2px 6px; border-radius: 4px; font-family: 'Consolas', monospace; font-size: 0.8rem; white-space: nowrap; }
+  .cmd { color: #e2e8f0; font-family: 'Consolas', monospace; font-size: 0.8rem; }
+  .desc { color: #94a3b8; font-size: 0.8rem; }
+  .warn { background: #2d1f10; border: 1px solid #92400e; border-radius: 6px; padding: 8px 10px; font-size: 0.78rem; color: #fcd34d; margin-top: 10px; }
+  .tip { background: #1a2a1a; border: 1px solid #166534; border-radius: 6px; padding: 8px 10px; font-size: 0.78rem; color: #86efac; margin-top: 10px; }
+  .example { background: #181c2e; border-left: 3px solid #4f46e5; border-radius: 0 6px 6px 0; padding: 8px 10px; margin-top: 8px; font-family: 'Consolas', monospace; font-size: 0.78rem; color: #a5b4fc; line-height: 1.7; }
+  .tag { display: inline-block; background: #312e81; color: #a5b4fc; border-radius: 4px; padding: 1px 6px; font-size: 0.7rem; margin-left: 4px; vertical-align: middle; }
+  .tag.warn-tag { background: #7c2d12; color: #fca5a5; }
+  .tag.hot { background: #7f1d1d; color: #fca5a5; }
+  .full { grid-column: 1 / -1; }
+  .half { grid-column: span 1; }
+  .correct { color: #4ade80; }
+  .wrong { color: #f87171; }
+</style>
+</head>
+<body>
+
+<h1>🐧 OS Izpiski — Linux Mint Ukazi</h1>
+<p class="subtitle">Kolokvij — vaje 1, 2, 3 + pretekli kolokviji 2023 &amp; 2024</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-title">🔥 POGOSTO NA KOLOKVIJU</div>
+<div class="grid">
+
+  <!-- VGRAJENI UKAZI - na VSAKEM kolokviju -->
+  <div class="card red">
+    <h2><span>⚙️</span>Vgrajeni vs nevgrajeni ukazi <span class="tag hot">NA VSAKEM KOLOKVIJU</span></h2>
+    <table>
+      <tr>
+        <td style="width:45%"><strong class="correct">✅ VGRAJENI (builtin):</strong></td>
+        <td class="desc">del lupine bash, ni ločene datoteke</td>
+      </tr>
+      <tr><td><code>cd</code></td><td class="desc">menjava imenika</td></tr>
+      <tr><td><code>echo</code></td><td class="desc">izpis — obstaja tudi kot nevgrajen</td></tr>
+      <tr><td><code>pwd</code></td><td class="desc">trenutni imenik — obstaja tudi kot nevgrajen</td></tr>
+      <tr><td><code>help</code></td><td class="desc">pomoč za vgrajene ukaze</td></tr>
+      <tr>
+        <td><strong class="wrong">❌ NEVGRAJENI (external):</strong></td>
+        <td class="desc">ločen program v /bin, /usr/bin...</td>
+      </tr>
+      <tr><td><code>ls</code></td><td class="desc">/bin/ls</td></tr>
+      <tr><td><code>mv</code></td><td class="desc">/bin/mv</td></tr>
+      <tr><td><code>man</code></td><td class="desc">/usr/bin/man</td></tr>
+      <tr><td><code>info</code></td><td class="desc">/usr/bin/info</td></tr>
+    </table>
+    <div class="example">type -a echo    # pokaže obe različici<br>which ls        # pot do nevgrajenega ukaza</div>
+    <div class="tip">echo in pwd imata OBE različici. <code>cd</code> in <code>help</code> sta SAMO vgrajena!</div>
+  </div>
+
+  <!-- TEST UKAZI - pogosto na kolokviju -->
+  <div class="card purple">
+    <h2><span>🧪</span>Ukaz test / [ ] <span class="tag hot">POGOSTO NA KOLOKVIJU</span></h2>
+    <table>
+      <tr><td colspan="2" style="color:#c084fc; font-size:0.75rem; padding-bottom:4px">PREVERJANJE NIZOV:</td></tr>
+      <tr><td><code>-n "$x"</code></td><td class="desc">niz je <strong>neprazen</strong> → true</td></tr>
+      <tr><td><code>-z "$x"</code></td><td class="desc">niz je <strong>prazen</strong> → true</td></tr>
+      <tr><td><code>"$a" = "$b"</code></td><td class="desc">niza sta enaka</td></tr>
+      <tr><td colspan="2" style="color:#c084fc; font-size:0.75rem; padding: 6px 0 4px">PREVERJANJE DATOTEK:</td></tr>
+      <tr><td><code>-e dat</code></td><td class="desc">datoteka <strong>obstaja</strong></td></tr>
+      <tr><td><code>-f dat</code></td><td class="desc">navadna datoteka</td></tr>
+      <tr><td><code>-d dat</code></td><td class="desc">imenik</td></tr>
+      <tr><td><code>-s dat</code></td><td class="desc">datoteka obstaja in <strong>ni prazna</strong> (size &gt; 0)</td></tr>
+      <tr><td><code>-b dat</code></td><td class="desc">bločno orientirana naprava</td></tr>
+      <tr><td><code>-h dat</code></td><td class="desc">simbolična povezava</td></tr>
+      <tr><td><code>-r dat</code></td><td class="desc">berljiva</td></tr>
+      <tr><td><code>-w dat</code></td><td class="desc">zapisljiva</td></tr>
+      <tr><td><code>-x dat</code></td><td class="desc">izvršljiva</td></tr>
+      <tr><td colspan="2" style="color:#c084fc; font-size:0.75rem; padding: 6px 0 4px">PRIMERJANJE ŠTEVIL:</td></tr>
+      <tr><td><code>-eq -ne</code></td><td class="desc">enako / različno</td></tr>
+      <tr><td><code>-gt -ge</code></td><td class="desc">večje / večje ali enako</td></tr>
+      <tr><td><code>-lt -le</code></td><td class="desc">manjše / manjše ali enako</td></tr>
+    </table>
+    <div class="example">[ -n "$DAT" ] &amp;&amp; echo "napaka" || echo "OK"<br># → "napaka" če je DAT <strong>neprazen niz</strong><br><br>[ -s datoteka.txt ] || echo "1" &amp;&amp; echo "2"<br># -s = true če datoteka obstaja in ni prazna<br># || ima ENAKO prednost kot &amp;&amp; → levo desno!<br># Če datoteka prazna: echo "1" in echo "2" → "12"<br># Če datoteka ni prazna: samo echo "2" → "2"</div>
+    <div class="warn">⚠ <code>&amp;&amp;</code> in <code>||</code> imata ENAKO prednost — izvajajo se od leve proti desni!</div>
+  </div>
+
+  <!-- DOVOLJENJA PRETVORBA - na vsakem kolokviju -->
+  <div class="card yellow">
+    <h2><span>🔢</span>Pretvorba dovoljenj <span class="tag hot">NA VSAKEM KOLOKVIJU</span></h2>
+    <table>
+      <tr><td colspan="2" style="color:#fbbf24; font-size:0.75rem; padding-bottom:4px">VREDNOSTI: r=4, w=2, x=1</td></tr>
+      <tr><td><code>7</code> = rwx</td><td class="desc">4+2+1</td></tr>
+      <tr><td><code>6</code> = rw-</td><td class="desc">4+2+0</td></tr>
+      <tr><td><code>5</code> = r-x</td><td class="desc">4+0+1</td></tr>
+      <tr><td><code>4</code> = r--</td><td class="desc">4+0+0</td></tr>
+      <tr><td><code>3</code> = -wx</td><td class="desc">0+2+1</td></tr>
+      <tr><td><code>2</code> = -w-</td><td class="desc">0+2+0</td></tr>
+      <tr><td><code>1</code> = --x</td><td class="desc">0+0+1</td></tr>
+      <tr><td><code>0</code> = ---</td><td class="desc">0+0+0</td></tr>
+      <tr><td colspan="2" style="color:#fbbf24; font-size:0.75rem; padding: 6px 0 4px">POSEBNI BITI (4. cifra):</td></tr>
+      <tr><td><code>1xxx</code></td><td class="desc">sticky bit → T/t na koncu (npr. 1770)</td></tr>
+      <tr><td><code>2xxx</code></td><td class="desc">SGID bit</td></tr>
+      <tr><td><code>4xxx</code></td><td class="desc">SUID bit</td></tr>
+    </table>
+    <div class="example">755  → rwxr-xr-x  (lastnik vse, ostali r-x)<br>644  → rw-r--r--  (lastnik rw, ostali r)<br>664  → rw-rw-r--<br>421  → r---w---x<br>751  → rwxr-x--x<br>1770 → rwxrwx--T  (sticky bit!)<br><br>drwxrwx--T → 1770  (d=imenik, T=sticky)</div>
+    <div class="tip">Sticky bit (T) na imeniku: uporabniki ne morejo brisati datotek <strong>drugih</strong> uporabnikov.</div>
+  </div>
+
+  <!-- MEHKE POVEZAVE Z RELATIVNO POTJO -->
+  <div class="card cyan">
+    <h2><span>🔗</span>Mehke povezave — relativna pot <span class="tag hot">POGOSTO NA KOLOKVIJU</span></h2>
+    <table>
+      <tr><td><code>ln -s cilj ime</code></td><td class="desc">Ustvari simbolično (mehko) vez</td></tr>
+      <tr><td><code>ln cilj ime</code></td><td class="desc">Ustvari trdo vez</td></tr>
+      <tr><td><code>readlink ime</code></td><td class="desc">Kam kaže symbolična vez</td></tr>
+    </table>
+    <div class="example"># Si v /home/student, datoteka je v /etc/passwd<br>ln -s ../../etc/passwd geslo<br><br># Si v /home/student, datoteka je v /mod (korenski)<br>ln -s ../../mod mod<br><br># Si v /home/student, datoteka je v /media<br>ln -s ../../media mount</div>
+    <div class="tip">Štej nivoje: <code>/home/student</code> → 2× <code>../</code> = prideš v <code>/</code><br>Potem dodaj pot do ciljne datoteke.</div>
+    <div class="warn">⚠ Simbolična vez kaže na <strong>ime</strong> — če izbrišeš original, vez postane "mrtva".<br>Trda vez kaže na <strong>inode</strong> — original ne izgine dokler obstaja vsaj ena trda vez.</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-title">📁 NAVIGACIJA IN DATOTEČNI SISTEM</div>
+<div class="grid">
+
+  <div class="card blue">
+    <h2><span>📁</span>Navigacija &amp; orientacija</h2>
+    <table>
+      <tr><td><code>pwd</code></td><td class="desc">Izpiše trenutni imenik</td></tr>
+      <tr><td><code>cd /pot</code></td><td class="desc">Absolutna pot (začne z <code>/</code>)</td></tr>
+      <tr><td><code>cd pot</code></td><td class="desc">Relativna pot (brez <code>/</code>)</td></tr>
+      <tr><td><code>cd ~</code></td><td class="desc">Domači imenik</td></tr>
+      <tr><td><code>cd ..</code></td><td class="desc">En nivo višje</td></tr>
+      <tr><td><code>cd ../../etc</code></td><td class="desc">Dve ravni višje, potem v etc</td></tr>
+      <tr><td><code>cd -</code></td><td class="desc">Prejšnji imenik</td></tr>
+    </table>
+    <div class="tip">Iz <code>/home/jan</code> v <code>/etc</code>: relativno = <code>../../etc</code> | absolutno = <code>/etc</code></div>
+  </div>
+
+  <div class="card green">
+    <h2><span>📋</span>Izpis vsebine — ls</h2>
+    <table>
+      <tr><td><code>-l</code></td><td class="desc">Dolg izpis (dovoljenja, lastnik, velikost...)</td></tr>
+      <tr><td><code>-a</code></td><td class="desc">Pokaže skrite datoteke (začnejo z <code>.</code>)</td></tr>
+      <tr><td><code>-i</code></td><td class="desc">Izpiše inode številko</td></tr>
+      <tr><td><code>-h</code></td><td class="desc">Velikosti v KB/MB</td></tr>
+      <tr><td><code>-R</code></td><td class="desc">Rekurzivno (vsi podimenniki)</td></tr>
+      <tr><td><code>-t</code></td><td class="desc">Uredi po času spremembe</td></tr>
+      <tr><td><code>-S</code></td><td class="desc">Uredi po velikosti</td></tr>
+      <tr><td><code>-p</code></td><td class="desc">Doda <code>/</code> za imenike</td></tr>
+      <tr><td><code>-I *.txt</code></td><td class="desc">Izključi datoteke s končnico .txt</td></tr>
+    </table>
+    <div class="example">ls -la              # vse + skrite + dolg izpis<br>ls -lai             # + inode številke<br>ls -l /etc/shadow   # pravice na datoteki z gesli</div>
+  </div>
+
+  <div class="card cyan">
+    <h2><span>🌲</span>Drevesni izpis — tree</h2>
+    <table>
+      <tr><td><code>-L 2</code></td><td class="desc">Globina 2 nivoja</td></tr>
+      <tr><td><code>-d</code></td><td class="desc">Samo imeniki</td></tr>
+    </table>
+    <div class="example">tree -L 2 /         # vse do globine 2<br>tree -L 2 -d /      # samo imeniki</div>
+  </div>
+
+  <div class="card yellow">
+    <h2><span>📂</span>Ustvarjanje &amp; brisanje imenikov</h2>
+    <table>
+      <tr><td><code>mkdir ime</code></td><td class="desc">Ustvari imenik</td></tr>
+      <tr><td><code>mkdir -p a/b/c</code></td><td class="desc">Ustvari celo pot</td></tr>
+      <tr><td><code>mkdir 'op. sistemi'</code></td><td class="desc">Imenik s presledkom</td></tr>
+      <tr><td><code>mkdir $USER.new</code></td><td class="desc">Imenik z imenom trenutnega userja + pripona</td></tr>
+      <tr><td><code>rmdir -p a/b/c</code></td><td class="desc">Odstrani celo pot (mora biti prazna)</td></tr>
+    </table>
+    <div class="example">mkdir $USER-new      # npr. jan-new<br>mkdir $USER.new     # npr. jan.new</div>
+    <div class="tip"><code>$USER</code> je okoljska spremenljivka z imenom trenutnega uporabnika.</div>
+  </div>
+
+  <div class="card red">
+    <h2><span>📄</span>Kopiranje, premikanje, brisanje</h2>
+    <table>
+      <tr><td><code>cp izvor cilj</code></td><td class="desc">Kopira datoteko</td></tr>
+      <tr><td><code>cp -r dir/ cilj/</code></td><td class="desc">Kopira cel imenik rekurzivno</td></tr>
+      <tr><td><code>cp dir/* cilj/</code></td><td class="desc">Kopira vsebino (ne podimenikov)</td></tr>
+      <tr><td><code>cp .* cilj/</code></td><td class="desc">Kopira skrite datoteke (začnejo z .)</td></tr>
+      <tr><td><code>mv izvor cilj</code></td><td class="desc">Premakne / preimenuje</td></tr>
+      <tr><td><code>rm -r imenik</code></td><td class="desc">Rekurzivno briše imenik</td></tr>
+      <tr><td><code>rm -i *3*</code></td><td class="desc">Briše z potrditvijo, wildcard</td></tr>
+    </table>
+    <div class="example">cp ../admin/../student/vaje1/.* vaje2<br># .* = skrite datoteke iz vaje1 → v vaje2<br># pot se razreši: /home/student/vaje1</div>
+    <div class="warn">⚠ <code>mv vaje1/* vaje2</code> premakne vse RAZEN skritih. <code>mv -r</code> ne obstaja!</div>
+  </div>
+
+  <div class="card purple">
+    <h2><span>📊</span>stat &amp; inode</h2>
+    <table>
+      <tr><td><code>stat datoteka</code></td><td class="desc">Izpiše vse metapodatke</td></tr>
+      <tr><td><code>stat -c "%i"</code></td><td class="desc">Samo inode številka</td></tr>
+      <tr><td><code>ls -i</code></td><td class="desc">Inode v izpisu ls</td></tr>
+    </table>
+    <div class="tip"><strong>inode</strong> = metapodatki datoteke (dovoljenja, lastnik, velikost, timestamps, kazalci na podatke). Trde povezave delijo isti inode!</div>
+    <div class="example">stat /etc/passwd<br>ls -lai             # inode za vsako datoteko<br># Trda vez in original imata ISTI inode</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-title">👤 UPORABNIKI, DOVOLJENJA IN KONZOLE</div>
+<div class="grid">
+
+  <div class="card blue">
+    <h2><span>💻</span>Konzole &amp; terminali <span class="tag hot">POGOSTO NA KOLOKVIJU</span></h2>
+    <table>
+      <tr><td><code>Ctrl+Alt+F1-F6</code></td><td class="desc">V virtualno konzolo (iz grafičnega)</td></tr>
+      <tr><td><code>Alt+F1-F6</code></td><td class="desc">V virtualno konzolo (iz konzole)</td></tr>
+      <tr><td><code>Ctrl+Alt+F7</code></td><td class="desc">Nazaj v grafično namizje (X/Wayland)</td></tr>
+      <tr><td><code>/dev/tty1</code></td><td class="desc">Virtualna konzola 1</td></tr>
+      <tr><td><code>/dev/pts/...</code></td><td class="desc">Psevdoterminal (SSH, grafični terminal)</td></tr>
+      <tr><td><code>who</code></td><td class="desc">Kdo je prijavljen in na kateri konzoli</td></tr>
+      <tr><td><code>tty</code></td><td class="desc">Kateri terminal trenutno uporabljaš</td></tr>
+    </table>
+    <div class="tip">Grafično namizje tipično teče na tty7. Iz tty2 v grafično: <code>Ctrl+Alt+F7</code>.</div>
+  </div>
+
+  <div class="card orange">
+    <h2><span>👤</span>Upravljanje uporabnikov</h2>
+    <table>
+      <tr><td><code>whoami</code></td><td class="desc">Trenutno uporabniško ime</td></tr>
+      <tr><td><code>id</code></td><td class="desc">UID, GID in vse skupine</td></tr>
+      <tr><td><code>groups</code></td><td class="desc">Vse skupine trenutnega userja</td></tr>
+      <tr><td><code>sudo -u user ukaz</code></td><td class="desc">Izvedi ukaz kot drug uporabnik</td></tr>
+      <tr><td><code>sudo -i</code></td><td class="desc">Postani root (Ubuntu)</td></tr>
+      <tr><td><code>useradd -m -d /pot</code></td><td class="desc">Doda userja z domačim imenikom</td></tr>
+      <tr><td><code>usermod -aG sudo user</code></td><td class="desc">Dodaj userja v skupino sudo</td></tr>
+      <tr><td><code>groupadd skupina</code></td><td class="desc">Ustvari skupino</td></tr>
+    </table>
+    <div class="example">sudo -u www-data mkdir page    # kot www-data<br>sudo -u www-data touch page.html<br>sudo useradd -m -d /home/hrast veverica</div>
+  </div>
+
+  <div class="card green">
+    <h2><span>📁</span>Sistemske datoteke</h2>
+    <table>
+      <tr><td><code>/etc/passwd</code></td><td class="desc">Uporabniški računi (UID, GID, shell, home)</td></tr>
+      <tr><td><code>/etc/shadow</code></td><td class="desc">Kriptirana gesla</td></tr>
+      <tr><td><code>/etc/group</code></td><td class="desc">Skupine in njihovi člani</td></tr>
+    </table>
+    <div class="example"># GID primarne skupine userja syslog:<br>grep syslog /etc/passwd  # → 7. polje = shell, 4. = GID<br>cat /etc/group           # seznam skupin<br><br># Pravice na datoteki z gesli:<br>ls -l /etc/shadow<br><br># root UID = 0 (vedno!)</div>
+    <div class="tip"><code>/etc/passwd</code> vsebuje GID primarne skupine. <code>/etc/group</code> vsebuje seznam članov skupin.</div>
+  </div>
+
+  <div class="card yellow full">
+    <h2><span>🔐</span>Dovoljenja — chmod, chown, chgrp</h2>
+    <table>
+      <tr><td style="width:30%"><code>chmod u=rwx dat</code></td><td class="desc">Nastavi lastnikova dovoljenja (enačaj = točno to)</td></tr>
+      <tr><td><code>chmod g+r dat</code></td><td class="desc">Dodaj branje za skupino</td></tr>
+      <tr><td><code>chmod o-x dat</code></td><td class="desc">Odvzemi izvajanje ostalim</td></tr>
+      <tr><td><code>chmod 755 dat</code></td><td class="desc">rwxr-xr-x: lastnik=rwx, skupina=r-x, ostali=r-x</td></tr>
+      <tr><td><code>chmod 640 dat</code></td><td class="desc">rw-r-----: lastnik=rw, skupina=r, ostali=nič</td></tr>
+      <tr><td><code>chmod 1770 dir</code></td><td class="desc">rwxrwx--T: sticky bit (ostali ne morejo brisati tujih datotek)</td></tr>
+      <tr><td><code>chmod -R o+r dir</code></td><td class="desc">Rekurzivno nastavi dovoljenja</td></tr>
+      <tr><td><code>chown user dat</code></td><td class="desc">Nastavi lastnika</td></tr>
+      <tr><td><code>chown user:grp dat</code></td><td class="desc">Nastavi lastnika IN skupino</td></tr>
+      <tr><td><code>chown -R user dir</code></td><td class="desc">Rekurzivno za cel imenik</td></tr>
+      <tr><td><code>chgrp skupina dat</code></td><td class="desc">Nastavi samo skupino</td></tr>
+    </table>
+    <div class="example" style="margin-top:10px">
+      chmod 640 /home/hrast/veja.txt  # lastnik rw, skupina r, ostali ---<br>
+      chown veverica:veverica /home/hrast/veja.txt<br>
+      chmod 1770 /home/skupnaraba     # sticky bit za deljeni imenik
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-title">⚙️ BASH SKRIPTANJE</div>
+<div class="grid">
+
+  <div class="card blue full">
+    <h2><span>📜</span>Bash skripta — template za kolokvij <span class="tag hot">PROGRAMERSKA NALOGA</span></h2>
+    <div class="example">
+#!/bin/bash<br>
+<br>
+# 1. PREVERI ARGUMENTE<br>
+if [ -z "$1" ]; then<br>
+&nbsp;&nbsp;echo "Vhodni argument ni podan"<br>
+&nbsp;&nbsp;exit 99<br>
+fi<br>
+USER1="$1"<br>
+LINK="${2}"  # neobvezen 2. argument<br>
+<br>
+# 2. USTVARI IMENIK (z napako)<br>
+mkdir -p /tmp/"$USER1"/datoteke &amp;&amp; echo "Ustvarjen nov imenik" || { echo "Napaka med ustvarjanjem imenika"; exit 2; }<br>
+<br>
+# 2b. ALI PREVERI ČE ŽE OBSTAJA<br>
+imenik="${1:-skupnaraba}"  # privzeta vrednost<br>
+mkdir /home/"$imenik" || { echo "Imenik že obstaja"; exit 5; }<br>
+<br>
+# 3. USTVARI SKUPINO<br>
+groupadd sodelovanje &amp;&amp; echo "Ustvarjena nova skupina za skupno rabo" || echo "Skupina za skupno rabo že obstaja"<br>
+<br>
+# 4. NASTAVI LASTNIŠTVO (rekurzivno)<br>
+chown -R "$USER1":"$USER1" /tmp/"$USER1"<br>
+chgrp sodelovanje /home/"$imenik"<br>
+<br>
+# 5. NASTAVI DOVOLJENJA<br>
+chmod 1770 /home/"$imenik"  # rwxrwx--T (sticky bit)<br>
+chmod 640 /home/hrast/veja.txt  # lastnik rw, skupina r, ostali ---<br>
+<br>
+# 6. MEHKA POVEZAVA (če je podan 2. argument)<br>
+[ -n "$LINK" ] &amp;&amp; ln -s /tmp/"$USER1" /home/"$USER1"/"$LINK"<br>
+<br>
+# 7. IZPIS /tmp<br>
+ls -lai /tmp
+    </div>
+  </div>
+
+  <div class="card purple">
+    <h2><span>⚙️</span>Spremenljivke &amp; aritmetika</h2>
+    <table>
+      <tr><td><code>x=5</code></td><td class="desc">Brez presledkov!</td></tr>
+      <tr><td><code>${1:-/usr}</code></td><td class="desc">Arg 1, privzeto /usr</td></tr>
+      <tr><td><code>$((x + 3))</code></td><td class="desc">Aritmetika</td></tr>
+      <tr><td><code>let "i+=3"</code></td><td class="desc">Aritmetika</td></tr>
+      <tr><td><code>i=$(expr $i + 3)</code></td><td class="desc">Aritmetika (starejše)</td></tr>
+      <tr><td><code>$(ukaz)</code></td><td class="desc">Zamenjava ukaza</td></tr>
+      <tr><td><code>$?</code></td><td class="desc">Izhodni status zadnjega ukaza</td></tr>
+      <tr><td><code>$#</code></td><td class="desc">Število argumentov</td></tr>
+      <tr><td><code>$0</code></td><td class="desc">Ime skripte</td></tr>
+      <tr><td><code>$USER</code></td><td class="desc">Ime trenutnega uporabnika</td></tr>
+      <tr><td><code>$HOME</code></td><td class="desc">Domači imenik</td></tr>
+    </table>
+    <div class="example">id -u veverica    # UID userja veverica<br>id -g veverica    # GID userja veverica<br>echo $(id -u veverica) $(id -g veverica)</div>
+  </div>
+
+  <div class="card green">
+    <h2><span>🔄</span>Pogojno izvajanje</h2>
+    <table>
+      <tr><td><code>A &amp;&amp; B</code></td><td class="desc">B se izvede samo če A <strong>uspe</strong> (status 0)</td></tr>
+      <tr><td><code>A || B</code></td><td class="desc">B se izvede samo če A <strong>ne uspe</strong></td></tr>
+      <tr><td><code>{ ukazi; }</code></td><td class="desc">Združi ukaze (zadnje podpičje obvezno!)</td></tr>
+      <tr><td><code>( ukazi )</code></td><td class="desc">Izvedi v podlupini</td></tr>
+      <tr><td><code>ukaz1; ukaz2</code></td><td class="desc">Zaporedno (vedno oba)</td></tr>
+    </table>
+    <div class="example">mkdir dir &amp;&amp; echo "OK" || { echo "Napaka"; exit 2; }<br><br># Izhodni status:<br>echo $?  # 0 = uspeh, >0 = napaka<br>( ls; exit 10 )  # podlupina vrne status 10</div>
+    <div class="warn">⚠ <code>&amp;&amp;</code> in <code>||</code> imata ENAKO prednost — levo desno!<br>exit znotraj <code>{ }</code> zaključi celo skripto, znotraj <code>( )</code> samo podlupino.</div>
+  </div>
+
+  <div class="card orange">
+    <h2><span>🔄</span>While zanka &amp; inkrementiranje</h2>
+    <table>
+      <tr><td><code>i=$(($i + 3))</code></td><td class="desc"><span class="correct">✅</span> pravilno</td></tr>
+      <tr><td><code>let "i+=3"</code></td><td class="desc"><span class="correct">✅</span> pravilno</td></tr>
+      <tr><td><code>((i++))</code> × 3</td><td class="desc"><span class="correct">✅</span> trikrat ++</td></tr>
+      <tr><td><code>i=$(expr $i + 3)</code></td><td class="desc"><span class="correct">✅</span> pravilno</td></tr>
+      <tr><td><code>i=($i + 3)</code></td><td class="desc"><span class="wrong">❌</span> napačno</td></tr>
+      <tr><td><code>x=$(($x + 3))</code></td><td class="desc"><span class="wrong">❌</span> napačno (drugačna spremenljivka)</td></tr>
+    </table>
+    <div class="example">i=0<br>while [ $i -le 18 ]; do<br>&nbsp;&nbsp;echo $i<br>&nbsp;&nbsp;i=$(($i + 3))<br>done</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-title">🔍 FIND, PREUSMERITVE IN OBDELAVA BESEDILA</div>
+<div class="grid">
+
+  <div class="card red full">
+    <h2><span>🔍</span>Iskanje datotek — find <span class="tag hot">POGOSTO NA KOLOKVIJU</span></h2>
+    <table>
+      <tr><td style="width:35%"><code>-type f</code></td><td class="desc">Samo navadne datoteke</td></tr>
+      <tr><td><code>-type d</code></td><td class="desc">Samo imeniki</td></tr>
+      <tr><td><code>-name "*.log"</code></td><td class="desc">Po imenu — <strong>narekovaji obvezni!</strong></td></tr>
+      <tr><td><code>-mtime -7</code></td><td class="desc">Spremenjeno v zadnjih 7 dneh</td></tr>
+      <tr><td><code>-exec ukaz {} \;</code></td><td class="desc">Izvedi ukaz za vsako datoteko</td></tr>
+      <tr><td><code>-printf "%p\n"</code></td><td class="desc">Izpiše pot datoteke</td></tr>
+    </table>
+    <div class="example">find /var/log -type f -name "*.log" -exec wc -l {} \;<br>find . -type f -mtime -7 -printf "%p\n" | sort<br>find ~/Prenosi/ -name "*.pdf" -exec mv {} ~/Dokumenti/ \;</div>
+    <div class="warn">⚠ <code>*.pdf</code> brez narekovajev → lupina razširi vzorec PRED find! Vedno piši <code>"*.pdf"</code><br>find je privzeto <strong>rekurziven</strong> — preišče vse podimenike brez posebnega stikala.</div>
+  </div>
+
+  <div class="card purple full">
+    <h2><span>🔀</span>Preusmeritve &amp; pipe <span class="tag hot">POGOSTO NA KOLOKVIJU</span></h2>
+    <table>
+      <tr><td style="width:30%"><code>ukaz &gt; dat</code></td><td class="desc">Stdout → datoteka (prepiše)</td></tr>
+      <tr><td><code>ukaz &gt;&gt; dat</code></td><td class="desc">Stdout → datoteka (doda na konec)</td></tr>
+      <tr><td><code>ukaz 2&gt; dat</code></td><td class="desc">Stderr → datoteka</td></tr>
+      <tr><td><code>ukaz 2&gt;&amp;1</code></td><td class="desc">Stderr → tam kjer je stdout</td></tr>
+      <tr><td><code>ukaz1 | ukaz2</code></td><td class="desc">Stdout ukaz1 → stdin ukaz2</td></tr>
+      <tr><td><code>tee dat</code></td><td class="desc">Zapiše v datoteko IN pošlje naprej</td></tr>
+    </table>
+    <div class="example">stat data.txt 2&gt; error.txt | tail -4 | sort &gt; result.txt 2&gt; error_2.txt<br>cat /etc/group | cut -d: -f3 | sort -nr | tee a.txt 2&gt;b.txt<br><br># cat -A &gt;izhod1.txt &gt;izhod2.txt → stdout gre samo v izhod2.txt (zadnja preusmeritev!)</div>
+    <div class="warn">⚠ Ko pišeš <code>&gt;dat1 &gt;dat2</code> — stdout gre samo v <strong>zadnjo</strong> navedeno datoteko!</div>
+  </div>
+
+  <div class="card cyan full">
+    <h2><span>📝</span>Obdelava besedila — grep, awk, cut, sort, uniq</h2>
+    <table>
+      <tr><td style="width:35%"><code>grep 'vzorec' dat</code></td><td class="desc">Poišče vrstice z vzorcem</td></tr>
+      <tr><td><code>grep '200$'</code></td><td class="desc"><code>$</code> = konec vrstice</td></tr>
+      <tr><td><code>awk '{ print $2 }'</code></td><td class="desc">Izpiše 2. stolpec</td></tr>
+      <tr><td><code>cut -d: -f3</code></td><td class="desc">Reže po ločilu <code>:</code>, vzame 3. polje</td></tr>
+      <tr><td><code>sort -nr</code></td><td class="desc">Numerično padajoče</td></tr>
+      <tr><td><code>sort | uniq</code></td><td class="desc">Unikaten seznam (najprej sort!)</td></tr>
+      <tr><td><code>wc -l</code></td><td class="desc">Število vrstic</td></tr>
+      <tr><td><code>head -c 50</code></td><td class="desc">Prvih 50 znakov</td></tr>
+      <tr><td><code>tr -dc '.-'</code></td><td class="desc">Obdrži samo znake <code>.</code> in <code>-</code></td></tr>
+      <tr><td><code>split -b 1024 -d -a 2 f x</code></td><td class="desc">Razdeli datoteko po 1024B, x00, x01...</td></tr>
+    </table>
+    <div class="example">grep ' 200$' access.log | awk '{ print $2 }' | sort | uniq<br>cat /dev/urandom | tr -dc '.-' | head -c 50<br>find /var/log -type f -name "*.log" -exec wc -l {} \;</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-title">📋 PRIMERI PROGRAMERSKIH NALOG Z REŠITVAMI</div>
+<div class="grid">
+
+  <div class="card blue full">
+    <h2><span>✅</span>Primer rešitve — skupna raba imenika (kolokvij 2024)</h2>
+    <div class="example">
+#!/bin/bash<br>
+imenik="${1:-skupnaraba}"        # privzeta vrednost če arg ni podan<br>
+<br>
+mkdir /home/"$imenik" || { echo "Imenik že obstaja"; exit 5; }<br>
+<br>
+groupadd sodelovanje &amp;&amp; echo "Ustvarjena nova skupina za skupno rabo" \<br>
+&nbsp;&nbsp;|| echo "Skupina za skupno rabo že obstaja"<br>
+<br>
+chgrp sodelovanje /home/"$imenik"<br>
+chmod 1770 /home/"$imenik"       # rwxrwx--T = lastnik+skupina vse, ostali nič, sticky bit
+    </div>
+  </div>
+
+  <div class="card green full">
+    <h2><span>✅</span>Primer rešitve — ustvarjanje userja (kolokvij 2023)</h2>
+    <div class="example">
+#!/bin/bash<br>
+sudo useradd veverica --home /home/hrast -m \<br>
+&nbsp;&nbsp;|| { echo "Nimaš pravic ali pa uporabnik že obstaja."; exit 42; }<br>
+<br>
+sudo usermod -aG sudo veverica           # dodaj v sudo skupino<br>
+<br>
+echo $(id -u veverica) $(id -g veverica) # izpiši UID in GID<br>
+<br>
+touch /home/hrast/veja.txt<br>
+sudo chown veverica:veverica /home/hrast/veja.txt<br>
+chmod 640 /home/hrast/veja.txt           # lastnik rw-, skupina r--, ostali ---<br>
+<br>
+# Dodaj pravice za branje/pisanje trenutnemu userju (brez spremembe lastništva):<br>
+setfacl -m u:$USER:rw /home/hrast/veja.txt
+    </div>
+    <div class="tip">Za branje/pisanje brez spremembe lastništva se uporablja <code>setfacl</code> (Access Control List).</div>
+  </div>
+
+</div>
+
+</body>
+</html>
