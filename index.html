@@ -40,7 +40,7 @@
 <body>
 
 <h1>🐧 OS Izpiski — Linux Mint Ukazi</h1>
-<p class="subtitle">Kolokvij — vaje 1–5 + pretekli kolokviji 2023 &amp; 2024</p>
+<p class="subtitle">Kolokvij — vaje 1–9 + pretekli kolokviji 2023 &amp; 2024</p>
 
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="section-title">🔥 POGOSTO NA KOLOKVIJU</div>
@@ -443,6 +443,571 @@ sudo usermod -aG sudo miha
       <tr><td><code>split -b 1024 -d -a 2 f x</code></td><td class="desc">Razdeli datoteko po 1024B</td></tr>
     </table>
     <div class="example">grep ' 200$' access.log | awk '{ print $2 }' | sort | uniq<br>cat /dev/urandom | tr -dc '.-' | head -c 50<br>cut -d: -f1,6 /etc/passwd   # username + home imenik</div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-title">🔀 IF, CASE IN ZANKE — VAJE 6</div>
+<div class="grid">
+
+  <div class="card blue full">
+    <h2><span>🔀</span>if … then … elif … else … fi <span class="tag hot">POGOSTO NA KOLOKVIJU</span></h2>
+    <table>
+      <tr><td style="width:40%"><code>if ukaz; then</code></td><td class="desc">Pogoj = izhodni status ukaza (0 = true)</td></tr>
+      <tr><td><code>if [ pogoj ]; then</code></td><td class="desc">Testni pogoj ([ ] je ukaz test)</td></tr>
+      <tr><td><code>elif [ pogoj ]; then</code></td><td class="desc">Sicer, če …</td></tr>
+      <tr><td><code>else</code></td><td class="desc">Sicer</td></tr>
+      <tr><td><code>fi</code></td><td class="desc">Konec bloka (if backwards!)</td></tr>
+    </table>
+    <div class="example">
+# Primer: kopiraj z napako<br>
+if cp /etc/passwd .; then<br>
+&nbsp;&nbsp;echo "Kopiranje OK"<br>
+else<br>
+&nbsp;&nbsp;echo "Kopiranje NEUSPEŠNO"<br>
+fi<br>
+<br>
+# Isto s pogojnim izvajanjem (brez if):<br>
+cp /etc/passwd . &amp;&amp; echo "Kopiranje OK" || echo "Kopiranje NEUSPEŠNO"<br>
+<br>
+# Primer z && in ||:<br>
+x=5; y=10<br>
+if [ "$x" -eq 5 ] &amp;&amp; [ "$y" -eq 10 ]; then<br>
+&nbsp;&nbsp;echo "Oba pogoja sta resnična."<br>
+fi
+    </div>
+    <div class="warn">⚠ Presledki znotraj [ ] so <strong>obvezni</strong>: <code>[ -f "$dat" ]</code> ✅ — <code>[-f "$dat"]</code> ❌</div>
+  </div>
+
+  <div class="card purple">
+    <h2><span>📋</span>case … esac</h2>
+    <table>
+      <tr><td style="width:38%"><code>case $var in</code></td><td class="desc">Začetek bloka</td></tr>
+      <tr><td><code>vzorec) ukazi ;;</code></td><td class="desc">Veja (;; = break)</td></tr>
+      <tr><td><code>*) ukazi ;;</code></td><td class="desc">Privzeta veja (vse ostalo)</td></tr>
+      <tr><td><code>esac</code></td><td class="desc">Konec bloka (case backwards!)</td></tr>
+    </table>
+    <div class="example">
+case $x in<br>
+&nbsp;&nbsp;0) echo "Vrednost je 0." ;;<br>
+&nbsp;&nbsp;5) echo "Vrednost je 5." ;;<br>
+&nbsp;&nbsp;9) echo "Vrednost je 9." ;;<br>
+&nbsp;&nbsp;*) echo "Nepoznana vrednost." ;;<br>
+esac<br>
+<br>
+# Vzorci podpirajo wildcards:<br>
+case "$ext" in<br>
+&nbsp;&nbsp;*.sh) echo "shell skripta" ;;<br>
+&nbsp;&nbsp;*.txt|*.md) echo "besedilo" ;;<br>
+&nbsp;&nbsp;*) echo "drugo" ;;<br>
+esac
+    </div>
+    <div class="tip">case je pogosto <strong>čistejši</strong> od dolgih if/elif verig. Vzorci so globs (ne regex).</div>
+  </div>
+
+  <div class="card green">
+    <h2><span>🔁</span>while &amp; until</h2>
+    <table>
+      <tr><td style="width:42%"><code>while [ pogoj ]; do</code></td><td class="desc">Ponavljaj <strong>dokler</strong> pogoj drži</td></tr>
+      <tr><td><code>until [ pogoj ]; do</code></td><td class="desc">Ponavljaj <strong>dokler</strong> pogoj ne drži</td></tr>
+      <tr><td><code>while true; do</code></td><td class="desc">Neskončna zanka</td></tr>
+      <tr><td><code>while :; do</code></td><td class="desc">Neskončna zanka (<code>:</code> = vgrajen, vedno true)</td></tr>
+      <tr><td><code>done</code></td><td class="desc">Konec zanke</td></tr>
+    </table>
+    <div class="example">
+# Štej od 0 do 10:<br>
+x=0<br>
+while [ "$x" -le 10 ]; do<br>
+&nbsp;&nbsp;echo "x = $x"<br>
+&nbsp;&nbsp;x=$(expr $x + 1)   # ali: x=$(($x + 1))<br>
+done<br>
+<br>
+# Until (obraten pogoj):<br>
+x=0<br>
+until [ "$x" -gt 10 ]; do<br>
+&nbsp;&nbsp;echo "x = $x"<br>
+&nbsp;&nbsp;x=$(($x + 1))<br>
+done
+    </div>
+    <div class="warn">⚠ <code>x=$x+1</code> ❌ — niz! Pravilno: <code>x=$(($x + 1))</code> ali <code>x=$(expr $x + 1)</code></div>
+  </div>
+
+  <div class="card cyan">
+    <h2><span>🔄</span>for — vse oblike <span class="tag hot">POZOR: 3 OBLIKE</span></h2>
+    <table>
+      <tr><td colspan="2" style="color:#22d3ee;font-size:0.75rem;padding-bottom:4px">OBLIKA 1 — seznam:</td></tr>
+      <tr><td style="width:44%"><code>for x in a b c; do</code></td><td class="desc">Iterira čez seznam vrednosti</td></tr>
+      <tr><td><code>for f in *; do</code></td><td class="desc">Vse datoteke v imeniku</td></tr>
+      <tr><td><code>for i in {1..10}; do</code></td><td class="desc">Razpon (bash brace expansion)</td></tr>
+      <tr><td><code>for i in $(seq 1 10); do</code></td><td class="desc">Razpon z ukazom seq</td></tr>
+      <tr><td colspan="2" style="color:#22d3ee;font-size:0.75rem;padding:6px 0 4px">OBLIKA 2 — C-style (bash ≥ 2.04):</td></tr>
+      <tr><td><code>for ((i=0; i&lt;10; i++)); do</code></td><td class="desc">Klasična C-stilska zanka</td></tr>
+    </table>
+    <div class="example">
+# Oblika 1 — seznam:<br>
+for x in papir svincnik pero; do<br>
+&nbsp;&nbsp;echo "$x"; done<br>
+<br>
+# Oblika 2 — razpon z {..}:<br>
+for i in {24..42}; do echo -n "$i "; done<br>
+<br>
+# Oblika 3 — C-style:<br>
+for ((i=1; i&lt;=500; i++)); do<br>
+&nbsp;&nbsp;echo $i; sleep 1; done<br>
+<br>
+# Vse datoteke → dodaj .html:<br>
+for f in *; do mv "$f" "$f.html"; done
+    </div>
+  </div>
+
+  <div class="card orange">
+    <h2><span>📚</span>Tabele (Arrays)</h2>
+    <table>
+      <tr><td style="width:44%"><code>t=(a b c d)</code></td><td class="desc">Definicija tabele</td></tr>
+      <tr><td><code>declare -a t</code></td><td class="desc">Prazna indeksirana tabela</td></tr>
+      <tr><td><code>declare -A t</code></td><td class="desc">Prazna asociativna tabela (slovar)</td></tr>
+      <tr><td><code>${t[0]}</code></td><td class="desc">Element na indeksu 0</td></tr>
+      <tr><td><code>${t[*]}</code> ali <code>${t[@]}</code></td><td class="desc">Vsi elementi</td></tr>
+      <tr><td><code>${#t[*]}</code></td><td class="desc">Število elementov</td></tr>
+      <tr><td><code>t[5]=nova</code></td><td class="desc">Nastavi element</td></tr>
+    </table>
+    <div class="example">
+barve=(rdeča zelena modra rumena)<br>
+echo ${#barve[*]}   # → 4<br>
+echo ${barve[0]}    # → rdeča<br>
+echo ${barve[@]}    # → rdeča zelena modra rumena<br>
+<br>
+# Iteracija čez tabelo:<br>
+for b in "${barve[@]}"; do<br>
+&nbsp;&nbsp;echo "$b"<br>
+done<br>
+<br>
+# Z indeksi:<br>
+i=0<br>
+while [ $i -lt ${#barve[*]} ]; do<br>
+&nbsp;&nbsp;echo "$((i+1)): ${barve[$i]}"<br>
+&nbsp;&nbsp;let i++<br>
+done
+    </div>
+    <div class="tip"><code>let i++</code> = <code>i=$(($i + 1))</code> — vgrajeno, deluje samo za aritmetiko!</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-title">🔧 FUNKCIJE, READ IN OBSEG — VAJE 7</div>
+<div class="grid">
+
+  <div class="card blue full">
+    <h2><span>🔧</span>Funkcije v Bash <span class="tag hot">POGOSTO NA KOLOKVIJU</span></h2>
+    <table>
+      <tr><td colspan="3" style="color:#60a5fa;font-size:0.75rem;padding-bottom:4px">DEFINICIJA (oba načina sta enaka):</td></tr>
+      <tr><td style="width:38%"><code>function ime { ... }</code></td><td class="desc">Način 1 — z besedo function</td></tr>
+      <tr><td><code>ime () { ... }</code></td><td class="desc">Način 2 — brez besede function</td></tr>
+      <tr><td colspan="3" style="color:#60a5fa;font-size:0.75rem;padding:6px 0 4px">KLIC FUNKCIJE:</td></tr>
+      <tr><td><code>ime_funkcije</code></td><td class="desc">Izvajanje v <strong>trenutni</strong> lupini</td></tr>
+      <tr><td><code>(ime_funkcije)</code></td><td class="desc">Izvajanje v <strong>podlupini</strong> (spremenljivke izolirane)</td></tr>
+      <tr><td><code>izpis=$(ime_funkcije)</code></td><td class="desc">Zajem izpisa funkcije</td></tr>
+      <tr><td colspan="3" style="color:#60a5fa;font-size:0.75rem;padding:6px 0 4px">ARGUMENTI IN VRAČANJE:</td></tr>
+      <tr><td><code>$1, $2, ...</code></td><td class="desc">Argumenti funkcije (lokalni, ne skripta!)</td></tr>
+      <tr><td><code>return N</code></td><td class="desc">Vrne izhodni status (0–255), dostopen kot <code>$?</code></td></tr>
+      <tr><td><code>echo vrednost</code></td><td class="desc">Vrne vrednost — zajem z <code>$(...)</code></td></tr>
+    </table>
+    <div class="example">
+# Funkcija z echo (priporočen način vračanja vrednosti):<br>
+function factorial {<br>
+&nbsp;&nbsp;if (( $1 &lt;= 1 )); then<br>
+&nbsp;&nbsp;&nbsp;&nbsp;echo 1<br>
+&nbsp;&nbsp;else<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rezultat=$(factorial $(( $1 - 1 )))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;echo $(( $1 * $rezultat ))<br>
+&nbsp;&nbsp;fi<br>
+}<br>
+echo $(factorial 5)   # → 120<br>
+<br>
+# Definicijo mora biti PRED klicem:<br>
+# pozdrav   ← napaka: command not found<br>
+function pozdrav { echo "Pozdravljen!"; }<br>
+pozdrav     # ← OK
+    </div>
+    <div class="warn">⚠ <code>return</code> je samo za izhodni status (0–255, celo število)! Za pravo vrednost: uporabi <code>echo</code> + <code>$()</code>.<br>⚠ Funkcija mora biti definirana PRED klicem!</div>
+  </div>
+
+  <div class="card purple">
+    <h2><span>🌐</span>Obseg spremenljivk &amp; export</h2>
+    <table>
+      <tr><td colspan="2" style="color:#c084fc;font-size:0.75rem;padding-bottom:4px">OBSEG SPREMENLJIVK:</td></tr>
+      <tr><td style="width:38%"><code>a=vrednost</code> (v funkciji)</td><td class="desc">Globalna — vidna po celotni skripti!</td></tr>
+      <tr><td><code>local a=vrednost</code></td><td class="desc">Lokalna — samo znotraj funkcije</td></tr>
+      <tr><td><code>(funkcija)</code></td><td class="desc">Podlupina — spremenljivke izolirane</td></tr>
+      <tr><td colspan="2" style="color:#c084fc;font-size:0.75rem;padding:6px 0 4px">EXPORT (okoljske spremenljivke):</td></tr>
+      <tr><td><code>export VAR=vrednost</code></td><td class="desc">Nastavi + izvozi za podprocese</td></tr>
+      <tr><td><code>export VAR</code></td><td class="desc">Izvozi obstoječo spremenljivko</td></tr>
+      <tr><td><code>env</code></td><td class="desc">Izpiše vse okoljske spremenljivke</td></tr>
+    </table>
+    <div class="example">
+# Brez local — globalna:<br>
+function f { a="znotraj"; }<br>
+echo $a     # → (prazno)<br>
+f<br>
+echo $a     # → "znotraj"  ← NEVARNO!<br>
+<br>
+# Z local — lokalna:<br>
+function f { local a="znotraj"; }<br>
+f<br>
+echo $a     # → (prazno) ← varna<br>
+<br>
+# export za podprocese:<br>
+export MOJA_VAR=42<br>
+bash -c 'echo $MOJA_VAR'   # → 42
+    </div>
+    <div class="tip">Navadna spremenljivka (brez export) se <strong>ne prenese</strong> v podprocese! Export vrednost prenese samo ob <strong>zagonu</strong> podprocesa.</div>
+  </div>
+
+  <div class="card cyan">
+    <h2><span>⌨️</span>read — branje vhoda</h2>
+    <table>
+      <tr><td style="width:42%"><code>read VAR</code></td><td class="desc">Prebere vrstico v spremenljivko</td></tr>
+      <tr><td><code>read -p "Poziv: " VAR</code></td><td class="desc">Izpiše poziv in prebere</td></tr>
+      <tr><td><code>read -t 5 VAR</code></td><td class="desc">Timeout 5 sekund</td></tr>
+      <tr><td><code>read -s VAR</code></td><td class="desc">Tiho (ne izpiše vnosa — gesla!)</td></tr>
+      <tr><td><code>read -n 1 VAR</code></td><td class="desc">Prebere samo 1 znak</td></tr>
+      <tr><td><code>read VAR1 VAR2</code></td><td class="desc">Več spremenljivk (loči po presledku)</td></tr>
+    </table>
+    <div class="example">
+# Osnovno branje:<br>
+echo -n "Vpišite ime: "<br>
+read ime<br>
+echo "Pozdravljen, $ime!"<br>
+<br>
+# Z validacijo (ponavljaj dokler ni vpisano):<br>
+while [ -z "$ime" ]; do<br>
+&nbsp;&nbsp;echo -n "Vpišite ime: "<br>
+&nbsp;&nbsp;read ime<br>
+done<br>
+echo "Pozdravljen, $ime!"<br>
+<br>
+# S timeoutom (vaje 7 — veriga.sh):<br>
+if read -t 5 imenik; then<br>
+&nbsp;&nbsp;echo "Vpisali ste: $imenik"<br>
+else<br>
+&nbsp;&nbsp;echo "Timeout!"; exit<br>
+fi
+    </div>
+    <div class="warn">⚠ <code>[ -z "$VAR" ]</code> = niz je prazen (nič ni vpisano)<br><code>[ -n "$VAR" ]</code> = niz je neprazen (kaj je vpisano)</div>
+  </div>
+
+  <div class="card green">
+    <h2><span>📖</span>Branje iz datoteke</h2>
+    <table>
+      <tr><td style="width:44%"><code>while read vr; do ... done &lt; dat</code></td><td class="desc">Priporočen način</td></tr>
+      <tr><td><code>cat dat | while read vr; do</code></td><td class="desc">Alternativa (podlupina!)</td></tr>
+    </table>
+    <div class="example">
+# Priporočen način — preusmeritev:<br>
+datoteka=$1<br>
+while read vrstica; do<br>
+&nbsp;&nbsp;echo "$vrstica"<br>
+done &lt; "$datoteka"<br>
+<br>
+# Alternativa — pipe (spremenljivke se izgubijo po zanki!):<br>
+cat "$datoteka" | while read vrstica; do<br>
+&nbsp;&nbsp;echo "$vrstica"<br>
+done<br>
+<br>
+# Pregled mehkih povezav (veriga.sh vzorec):<br>
+for dat in "$imenik"/*; do<br>
+&nbsp;&nbsp;if [ -L "$dat" ]; then<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cilj=$(readlink "$dat")<br>
+&nbsp;&nbsp;&nbsp;&nbsp;echo "$dat -&gt; $cilj"<br>
+&nbsp;&nbsp;fi<br>
+done
+    </div>
+    <div class="warn">⚠ <code>cat file | while read</code> teče v <strong>podlupini</strong> — spremenljivke nastavljene v zanki niso vidne zunaj!</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-title">📦 PREUSMERITVE IN CEVOVODI — VAJE 8</div>
+<div class="grid">
+
+  <div class="card red full">
+    <h2><span>🔀</span>Preusmeritve — celoten pregled <span class="tag hot">NA VSAKEM KOLOKVIJU</span></h2>
+    <table>
+      <tr><td style="width:32%"><code>&lt; dat</code></td><td class="desc">Stdin iz datoteke</td></tr>
+      <tr><td><code>&gt; dat</code></td><td class="desc">Stdout v datoteko (prepiše)</td></tr>
+      <tr><td><code>&gt;&gt; dat</code></td><td class="desc">Stdout v datoteko (doda na konec)</td></tr>
+      <tr><td><code>2&gt; dat</code></td><td class="desc">Stderr v datoteko</td></tr>
+      <tr><td><code>2&gt;&gt; dat</code></td><td class="desc">Stderr v datoteko (doda)</td></tr>
+      <tr><td><code>2&gt;&amp;1</code></td><td class="desc">Stderr → stdout (preusmeri na isti tok)</td></tr>
+      <tr><td><code>1&gt;&amp;2</code></td><td class="desc">Stdout → stderr</td></tr>
+      <tr><td><code>&amp;&gt; dat</code></td><td class="desc">Stdout IN stderr v datoteko</td></tr>
+      <tr><td><code>&gt; /dev/null</code></td><td class="desc">Zavrzi stdout (tiho)</td></tr>
+      <tr><td><code>&gt; /dev/null 2&gt;&amp;1</code></td><td class="desc">Zavrzi stdout IN stderr</td></tr>
+      <tr><td><code>&lt;&lt;KONEC ... KONEC</code></td><td class="desc">Here-document (inline vhod)</td></tr>
+    </table>
+    <div class="example">
+# VRSTNI RED ŠTEJE:<br>
+ls -l 2&gt;izhod.txt 1&gt;&amp;2   # stdout → stderr (→ izhod.txt) ✅<br>
+ls -l 1&gt;&amp;2 2&gt;izhod.txt   # stdout gre v ORIGINALNI stderr, ne v izhod.txt!<br>
+<br>
+# pwd ne bere stdin → &lt; nima učinka:<br>
+pwd &lt; vhod.txt    # ignorira vhod.txt, izpiše pot<br>
+<br>
+# Here-document:<br>
+cat &lt;&lt;KONEC<br>
+To je vhodna vsebina<br>
+KONEC<br>
+<br>
+# Zavrzi vse izpise:<br>
+ukaz &gt; /dev/null 2&gt;&amp;1
+    </div>
+    <div class="warn">⚠ Vrstni red preusmeritev je POMEMBEN! <code>2&gt;&amp;1</code> pomeni "stderr → kamor kaže stdout ZDAJ".<br>⚠ Več preusmeritev stdout → velja samo <strong>zadnja</strong> v vrstici.</div>
+  </div>
+
+  <div class="card purple">
+    <h2><span>🔗</span>Cevovodi (pipes)</h2>
+    <table>
+      <tr><td style="width:38%"><code>ukaz1 | ukaz2</code></td><td class="desc">Stdout ukaz1 → stdin ukaz2</td></tr>
+      <tr><td><code>cat dat | more</code></td><td class="desc">Isto kot <code>more dat</code></td></tr>
+      <tr><td><code>mkfifo testpipe</code></td><td class="desc">Ustvari imenovan cevovod (FIFO)</td></tr>
+      <tr><td><code>cat &gt; testpipe &amp;</code></td><td class="desc">Piši v cevovod v ozadju</td></tr>
+      <tr><td><code>cat &lt; testpipe</code></td><td class="desc">Beri iz cevovoda</td></tr>
+    </table>
+    <div class="example">
+# Klasični cevovodi:<br>
+cat /etc/passwd | sort | more<br>
+tree / | less<br>
+<br>
+# 5 največjih datotek:<br>
+find . -type f -exec du -h {} \; | sort -rh | head -5<br>
+# ali:<br>
+du -ah . | sort -rh | head -5<br>
+<br>
+# Imenovan cevovod:<br>
+mkfifo /tmp/mojacev<br>
+cat /etc/passwd &gt; /tmp/mojacev &amp;<br>
+cat &lt; /tmp/mojacev
+    </div>
+    <div class="tip">Cevovodi so <strong>sinhroni</strong> — ukaz2 teče vzporedno z ukaz1, ne čaka nanj!</div>
+  </div>
+
+  <div class="card yellow">
+    <h2><span>📄</span>cat, head, tail, less, more</h2>
+    <table>
+      <tr><td style="width:38%"><code>cat dat</code></td><td class="desc">Izpiše datoteko</td></tr>
+      <tr><td><code>cat dat1 dat2 &gt; out</code></td><td class="desc">Spoji datoteki</td></tr>
+      <tr><td><code>cat &gt; dat</code></td><td class="desc">Piši v datoteko (Ctrl+D za konec)</td></tr>
+      <tr><td><code>cat &lt;&lt;END &gt; dat</code></td><td class="desc">Here-doc v datoteko</td></tr>
+      <tr><td><code>head -n 10 dat</code></td><td class="desc">Prvih 10 vrstic</td></tr>
+      <tr><td><code>head -c 100 dat</code></td><td class="desc">Prvih 100 bajtov</td></tr>
+      <tr><td><code>tail -n 10 dat</code></td><td class="desc">Zadnjih 10 vrstic</td></tr>
+      <tr><td><code>tail -f dat</code></td><td class="desc">Sledi datoteki v realnem času (logi!)</td></tr>
+      <tr><td><code>less dat</code></td><td class="desc">Brskanje (q=izhod, /=iskanje, n=naslednji)</td></tr>
+      <tr><td><code>more dat</code></td><td class="desc">Enosmerno brskanje</td></tr>
+    </table>
+    <div class="example">
+# Pregled zadnjih logov v živo:<br>
+tail -f /var/log/syslog<br>
+<br>
+# Spoji 3 datoteke:<br>
+cat vhod1.txt vhod2.txt vhod3.txt &gt; skupaj.txt<br>
+<br>
+# Nevarno — branje in pisanje v isto datoteko!<br>
+cat &lt; izhod.txt &gt;&gt; izhod.txt   # neskončna zanka!
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-title">🛠️ NAPREDNA OBDELAVA BESEDILA — VAJE 9</div>
+<div class="grid">
+
+  <div class="card green">
+    <h2><span>🔢</span>sort, shuf, uniq, wc</h2>
+    <table>
+      <tr><td colspan="2" style="color:#4ade80;font-size:0.75rem;padding-bottom:4px">sort — urejanje:</td></tr>
+      <tr><td style="width:38%"><code>sort dat</code></td><td class="desc">Uredi abecedno naraščajoče</td></tr>
+      <tr><td><code>sort -r</code></td><td class="desc">Padajoče</td></tr>
+      <tr><td><code>sort -n</code></td><td class="desc">Numerično (ne abecedno!)</td></tr>
+      <tr><td><code>sort -rn</code></td><td class="desc">Numerično padajoče</td></tr>
+      <tr><td><code>sort -h</code></td><td class="desc">Human-readable (KB, MB, GB)</td></tr>
+      <tr><td><code>sort -k2</code></td><td class="desc">Po 2. stolpcu</td></tr>
+      <tr><td><code>sort -t: -k3n</code></td><td class="desc">Ločilo :, 3. polje numerično</td></tr>
+      <tr><td><code>sort -u</code></td><td class="desc">Uredi + odstrani duplikate</td></tr>
+      <tr><td colspan="2" style="color:#4ade80;font-size:0.75rem;padding:6px 0 4px">shuf — naključno mešanje:</td></tr>
+      <tr><td><code>shuf dat</code></td><td class="desc">Naključno premeša vrstice</td></tr>
+      <tr><td><code>shuf -n 5 dat</code></td><td class="desc">Vzame 5 naključnih vrstic</td></tr>
+      <tr><td><code>shuf -i 100-999</code></td><td class="desc">Permutiraj obseg števil</td></tr>
+      <tr><td colspan="2" style="color:#4ade80;font-size:0.75rem;padding:6px 0 4px">uniq — duplikati (deluje samo na urejeni vhod!):</td></tr>
+      <tr><td><code>sort | uniq</code></td><td class="desc">Odstrani duplikate</td></tr>
+      <tr><td><code>sort | uniq -c</code></td><td class="desc">Preštej pojavitve</td></tr>
+      <tr><td><code>sort | uniq -d</code></td><td class="desc">Izpiše samo duplikate</td></tr>
+      <tr><td><code>sort | uniq -u</code></td><td class="desc">Izpiše samo unikatne</td></tr>
+      <tr><td colspan="2" style="color:#4ade80;font-size:0.75rem;padding:6px 0 4px">wc — štetje:</td></tr>
+      <tr><td><code>wc -l dat</code></td><td class="desc">Število vrstic</td></tr>
+      <tr><td><code>wc -w dat</code></td><td class="desc">Število besed</td></tr>
+      <tr><td><code>wc -c dat</code></td><td class="desc">Število znakov (bajtov)</td></tr>
+      <tr><td><code>wc dat</code></td><td class="desc">Vse tri hkrati</td></tr>
+    </table>
+    <div class="example">
+# Permutiraj 100-999, vzemi prvih 5:<br>
+shuf -i 100-999 | head -5<br>
+<br>
+# Koliko prijav na uporabnika (vaja 9.3):<br>
+who | awk '{print $1}' | sort | uniq -c | sort -rn<br>
+<br>
+# Število datotek v imeniku (vaja 9.4):<br>
+ls | wc -l
+    </div>
+  </div>
+
+  <div class="card blue">
+    <h2><span>🔡</span>tr, nl, column</h2>
+    <table>
+      <tr><td colspan="2" style="color:#60a5fa;font-size:0.75rem;padding-bottom:4px">tr — zamenjava/brisanje znakov:</td></tr>
+      <tr><td style="width:38%"><code>tr 'a-z' 'A-Z'</code></td><td class="desc">Male → VELIKE črke</td></tr>
+      <tr><td><code>tr 'A-Z' 'a-z'</code></td><td class="desc">VELIKE → male črke</td></tr>
+      <tr><td><code>tr -d '\r'</code></td><td class="desc">Briše znake \r (CRLF → LF)</td></tr>
+      <tr><td><code>tr -dc 'a-zA-Z0-9'</code></td><td class="desc">Obdrži SAMO alfanumerične</td></tr>
+      <tr><td><code>tr -s ' '</code></td><td class="desc">Stisni večkratne presledke v enega</td></tr>
+      <tr><td colspan="2" style="color:#60a5fa;font-size:0.75rem;padding:6px 0 4px">nl — oštevilčenje vrstic:</td></tr>
+      <tr><td><code>nl dat</code></td><td class="desc">Oštevilči neprazne vrstice</td></tr>
+      <tr><td><code>nl -ba dat</code></td><td class="desc">Oštevilči VSE vrstice</td></tr>
+      <tr><td colspan="2" style="color:#60a5fa;font-size:0.75rem;padding:6px 0 4px">column — poravnava stolpcev:</td></tr>
+      <tr><td><code>column -t</code></td><td class="desc">Poravna stolpce (po presledkih)</td></tr>
+      <tr><td><code>column -t -s :</code></td><td class="desc">Poravna po ločilu :</td></tr>
+    </table>
+    <div class="example">
+# Male → VELIKE (vaja 9.6):<br>
+echo "Operacijski sistemi" | tr 'a-z' 'A-Z'<br>
+# → OPERACIJSKI SISTEMI<br>
+<br>
+# Prikaz /etc/passwd poravnano (vaja 9.12):<br>
+cat /etc/passwd | column -t -s :<br>
+<br>
+# grep z oštevilčenimi vrsticami (vaja 9.8):<br>
+man find | grep -n -B2 -A2 "inode" | nl
+    </div>
+    <div class="tip"><code>tr</code> bere SAMO stdin, ne datoteke neposredno — vedno z <code>echo</code> ali <code>cat |</code>.</div>
+  </div>
+
+  <div class="card cyan">
+    <h2><span>✂️</span>cut, paste, split, join</h2>
+    <table>
+      <tr><td colspan="2" style="color:#22d3ee;font-size:0.75rem;padding-bottom:4px">cut — izreži polja:</td></tr>
+      <tr><td style="width:38%"><code>cut -d: -f1</code></td><td class="desc">Ločilo :, vzemi 1. polje</td></tr>
+      <tr><td><code>cut -d: -f1,3</code></td><td class="desc">Vzemi 1. in 3. polje</td></tr>
+      <tr><td><code>cut -c1-5</code></td><td class="desc">Znaki 1–5 vsake vrstice</td></tr>
+      <tr><td colspan="2" style="color:#22d3ee;font-size:0.75rem;padding:6px 0 4px">paste — spoji vrstice:</td></tr>
+      <tr><td><code>paste dat1 dat2</code></td><td class="desc">Spoji datoteki po vrsticah (s tabulatorjem)</td></tr>
+      <tr><td><code>paste -d: dat1 dat2</code></td><td class="desc">Spoji z ločilom :</td></tr>
+      <tr><td><code>paste -s dat</code></td><td class="desc">Vse vrstice v eno (horizontalno)</td></tr>
+      <tr><td colspan="2" style="color:#22d3ee;font-size:0.75rem;padding:6px 0 4px">split — razdeli datoteko:</td></tr>
+      <tr><td><code>split -l 1000 dat x</code></td><td class="desc">Po 1000 vrstic, predpona x</td></tr>
+      <tr><td><code>split -b 1M dat x</code></td><td class="desc">Po 1MB</td></tr>
+      <tr><td><code>split -d -a 3 dat drevo_</code></td><td class="desc">Numerične pripone (000, 001...)</td></tr>
+      <tr><td colspan="2" style="color:#22d3ee;font-size:0.75rem;padding:6px 0 4px">join — spoji po ključu:</td></tr>
+      <tr><td><code>join dat1 dat2</code></td><td class="desc">Spoji po 1. polju (mora biti urejeno!)</td></tr>
+      <tr><td><code>join -t: -1 1 -2 1 dat1 dat2</code></td><td class="desc">Ločilo :, ključ polje 1 v obeh</td></tr>
+    </table>
+    <div class="example">
+# Izpiši username + home (vaja 9):<br>
+cut -d: -f1,6 /etc/passwd<br>
+<br>
+# Razdeli tree v datoteke po 1000 vrstic (vaja 9.7):<br>
+tree / | split -l 1000 -d -a 3 - drevo_<br>
+<br>
+# Usernames iz /etc/passwd:<br>
+cut -d: -f1 /etc/passwd | sort
+    </div>
+  </div>
+
+  <div class="card orange">
+    <h2><span>🔍</span>cmp, diff</h2>
+    <table>
+      <tr><td colspan="2" style="color:#fb923c;font-size:0.75rem;padding-bottom:4px">cmp — primerjava bajtov:</td></tr>
+      <tr><td style="width:38%"><code>cmp dat1 dat2</code></td><td class="desc">Tiho če enaki; izpiše 1. razliko</td></tr>
+      <tr><td><code>cmp -s dat1 dat2</code></td><td class="desc">Samo izhodni status (0=enaki, 1=različni)</td></tr>
+      <tr><td colspan="2" style="color:#fb923c;font-size:0.75rem;padding:6px 0 4px">diff — primerjava vrstic:</td></tr>
+      <tr><td><code>diff dat1 dat2</code></td><td class="desc">Razlike po vrsticah</td></tr>
+      <tr><td><code>diff -u dat1 dat2</code></td><td class="desc">Unified format (+ / - / kontekst)</td></tr>
+      <tr><td><code>diff -q dat1 dat2</code></td><td class="desc">Samo ali sta različni (tiho)</td></tr>
+    </table>
+    <div class="example">
+# Vaja 9.11 — primerjaj in briši backup:<br>
+if cmp -s server.conf server.conf.bak; then<br>
+&nbsp;&nbsp;rm server.conf.bak &amp;&amp; echo "Backup izbrisan." \<br>
+&nbsp;&nbsp;&nbsp;&nbsp;|| echo "Brisanje ni uspelo."<br>
+else<br>
+&nbsp;&nbsp;echo "Datoteki sta različni."<br>
+fi<br>
+<br>
+# diff izhod:<br>
+# &lt; vrstica samo v dat1<br>
+# &gt; vrstica samo v dat2
+    </div>
+    <div class="tip"><code>cmp -s</code> vrne 0 če enaki, 1 če različni → perfektno za <code>if</code>!</div>
+  </div>
+
+  <div class="card pink">
+    <h2><span>🔧</span>xargs &amp; tee</h2>
+    <table>
+      <tr><td colspan="2" style="color:#f472b6;font-size:0.75rem;padding-bottom:4px">xargs — posreduj argumente ukazom:</td></tr>
+      <tr><td style="width:38%"><code>echo "f1 f2" | xargs rm</code></td><td class="desc">Izvede: <code>rm f1 f2</code></td></tr>
+      <tr><td><code>find ... | xargs rm</code></td><td class="desc">Alternativa -exec (hitrejše!)</td></tr>
+      <tr><td><code>xargs -I {} ukaz {}</code></td><td class="desc">Vstavi vsak argument namesto {}</td></tr>
+      <tr><td><code>xargs -n 1</code></td><td class="desc">En argument na klic ukaza</td></tr>
+      <tr><td><code>xargs -p</code></td><td class="desc">Sprašuje pred vsakim klicem</td></tr>
+      <tr><td colspan="2" style="color:#f472b6;font-size:0.75rem;padding:6px 0 4px">tee — razveji tok:</td></tr>
+      <tr><td><code>ukaz | tee dat</code></td><td class="desc">Izpiše na zaslon IN shrani v dat</td></tr>
+      <tr><td><code>ukaz | tee dat1 dat2</code></td><td class="desc">Izpiše na zaslon IN v obe datoteki</td></tr>
+      <tr><td><code>ukaz | tee -a dat</code></td><td class="desc">Doda na konec datoteke</td></tr>
+    </table>
+    <div class="example">
+# Vaja 9.10 — find z xargs (namesto -exec):<br>
+find / -inum $(stat test.txt -c "%i") | xargs rm -i<br>
+<br>
+# Vaja 9.13 — zaslon + dve datoteki hkrati:<br>
+cat /etc/passwd | column -t -s : \<br>
+&nbsp;&nbsp;| tee uporabniki.txt \<br>
+&nbsp;&nbsp;| tee uporabniki_arhiv.txt<br>
+<br>
+# Naključno geslo 20 alfanumeričnih znakov (vaja 9.14):<br>
+cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 20
+    </div>
+    <div class="warn">⚠ <code>-exec rm {} \;</code> pokliče rm za VSAKO datoteko posebej.<br><code>| xargs rm</code> pokliče rm enkrat z vsemi datotekami — <strong>hitrejše</strong>!</div>
+  </div>
+
+  <div class="card yellow full">
+    <h2><span>🔎</span>grep — napredne možnosti</h2>
+    <table>
+      <tr><td style="width:32%"><code>grep -n vzorec dat</code></td><td class="desc">Izpiše številke vrstic</td></tr>
+      <tr><td><code>grep -B 2 vzorec</code></td><td class="desc">2 vrstici <strong>pred</strong> ujemanjem</td></tr>
+      <tr><td><code>grep -A 2 vzorec</code></td><td class="desc">2 vrstici <strong>po</strong> ujemanju</td></tr>
+      <tr><td><code>grep -C 2 vzorec</code></td><td class="desc">2 vrstici <strong>pred in po</strong> (kontekst)</td></tr>
+      <tr><td><code>grep -c vzorec dat</code></td><td class="desc">Samo število ujemajočih vrstic</td></tr>
+      <tr><td><code>grep -v vzorec dat</code></td><td class="desc">Vrstice brez vzorca (obratno)</td></tr>
+      <tr><td><code>grep -i vzorec dat</code></td><td class="desc">Neobčutljivo na velikost črk</td></tr>
+      <tr><td><code>grep -r vzorec dir</code></td><td class="desc">Rekurzivno po imeniku</td></tr>
+      <tr><td><code>grep -E vzorec</code></td><td class="desc">Razširjeni regex (ERE)</td></tr>
+      <tr><td><code>grep '^beseda'</code></td><td class="desc">Vrstice ki se začnejo z "beseda"</td></tr>
+      <tr><td><code>grep 'beseda$'</code></td><td class="desc">Vrstice ki se končajo z "beseda"</td></tr>
+    </table>
+    <div class="example">
+# Vaja 9.8 — inode v man find z kontekstom + oštevilčenje:<br>
+man find | grep -n -B2 -A2 "inode" | nl<br>
+<br>
+# Preveriti ali je admin prijavljen (vaja 9.1):<br>
+who | grep -q "administrator" &amp;&amp; echo "Prijavljen" || echo "Ni prijavljen"<br>
+<br>
+# Število prijavljenih uporabnikov (vaja 9.2):<br>
+who | wc -l
+    </div>
   </div>
 
 </div>
